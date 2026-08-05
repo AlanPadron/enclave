@@ -4,6 +4,7 @@ import { api, ApiError } from '../../services/api.js'
 import { connectSocket, getSocket, disconnectSocket } from '../../services/websocket.js'
 import { useVoice } from '../../services/voice.jsx'
 import ChannelList from '../Channels/ChannelList.jsx'
+import CreateChannel from '../Channels/CreateChannel.jsx'
 import ChannelView from '../Channels/ChannelView.jsx'
 import FriendList from '../Friends/FriendList.jsx'
 import Settings from '../Settings/Settings.jsx'
@@ -21,6 +22,7 @@ export default function AppShell() {
   const [sessionExpired, setSessionExpired] = useState(false)
   const [friendsOpen, setFriendsOpen] = useState(false)
   const [channelsOpen, setChannelsOpen] = useState(false)
+  const [createChannelOpen, setCreateChannelOpen] = useState(false)
   const voice = useVoice()
   const navigate = useNavigate()
 
@@ -98,7 +100,7 @@ export default function AppShell() {
       </aside>
 
       <aside className="shell-channels glass">
-        <ChannelList channels={channels} active={channelId} />
+        <ChannelList channels={channels} active={channelId} onCreate={() => setCreateChannelOpen(true)} />
       </aside>
 
       <main className={`shell-main glass ${voice.joined && voice.minimized ? 'with-pip' : ''}`}>
@@ -140,10 +142,19 @@ export default function AppShell() {
             <button className="btn btn-ghost" onClick={() => setChannelsOpen(false)} aria-label="cerrar">×</button>
           </div>
           <div className="divider" />
-          <ChannelList channels={channels} active={channelId} onPick={() => setChannelsOpen(false)} />
+          <ChannelList channels={channels} active={channelId} onPick={() => setChannelsOpen(false)} onCreate={() => { setChannelsOpen(false); setCreateChannelOpen(true) }} />
         </aside>
       </div>
 
+      <CreateChannel
+        open={createChannelOpen}
+        onClose={() => setCreateChannelOpen(false)}
+        onCreated={(ch) => {
+          setChannels((prev) => prev.some(c => c.id === ch.id) ? prev : [...prev, ch])
+          setCreateChannelOpen(false)
+          navigate(`/app/${ch.id}`)
+        }}
+      />
       <Settings open={settingsOpen} onClose={() => setSettingsOpen(false)} />
       <VoicePiP />
 

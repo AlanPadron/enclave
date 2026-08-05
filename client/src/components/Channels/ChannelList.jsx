@@ -1,29 +1,20 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { api } from '../../services/api.js'
 import './channels.css'
 
-const ICONS = {
-  text: '#',
-  voice: '~',
-  ai: '✦',
-}
+const ICONS = { text: '#', voice: '~', ai: '✦' }
 
-export default function ChannelList({ channels, active, onPick }) {
+export default function ChannelList({ channels, active, onPick, onCreate }) {
   const navigate = useNavigate()
   const [loadError, setLoadError] = useState(null)
   const [loading, setLoading] = useState(false)
 
-  // Self-contained retry: the AppShell already tries once, but if it failed
-  // the user can click here to retry without reloading the whole app.
   async function retry() {
     setLoading(true)
     setLoadError(null)
     try {
       const { channels } = await api.channels(api.token())
-      // The AppShell owns the state. We just tell it to refresh.
-      // A simple location.reload() works too — but is heavy. Instead, we
-      // dispatch a custom event the AppShell listens to.
       window.dispatchEvent(new CustomEvent('enclave:refresh-channels', { detail: { channels } }))
     } catch (err) {
       setLoadError(err.message || 'no se pudieron cargar los canales')
@@ -34,14 +25,24 @@ export default function ChannelList({ channels, active, onPick }) {
 
   return (
     <>
-      <div className="section-title">channels</div>
+      <div className="section-title-row">
+        <div className="section-title">channels</div>
+        {onCreate && (
+          <button
+            className="btn btn-ghost section-add"
+            onClick={onCreate}
+            title="crear canal"
+            aria-label="crear canal"
+          >
+            +
+          </button>
+        )}
+      </div>
 
-      {channels.length === 0 ? (
+      {loadError ? (
         <div className="channel-empty">
           <div className="channel-empty-mark">·</div>
-          <div className="channel-empty-text dim">
-            {loadError ? 'no se pudieron cargar' : 'cargando…'}
-          </div>
+          <div className="channel-empty-text dim">no se pudieron cargar</div>
           <button
             className="btn btn-ghost channel-retry"
             onClick={retry}
@@ -49,6 +50,19 @@ export default function ChannelList({ channels, active, onPick }) {
           >
             {loading ? 'reintentando…' : 'reintentar'}
           </button>
+        </div>
+      ) : channels.length === 0 ? (
+        <div className="channel-empty">
+          <div className="channel-empty-mark">·</div>
+          <div className="channel-empty-text">sin canales todavía</div>
+          {onCreate && (
+            <button
+              className="btn btn-primary channel-retry"
+              onClick={onCreate}
+            >
+              crear el primero
+            </button>
+          )}
         </div>
       ) : (
         <div className="channel-list">
@@ -61,8 +75,10 @@ export default function ChannelList({ channels, active, onPick }) {
             >
               <span className={`channel-icon kind-${c.kind}`}>{ICONS[c.kind] || '#'}</span>
               <span className="channel-name">{c.name}</span>
-              {c.kind === 'voice' && <span className="channel-pill">voice</span>}
-              {c.kind === 'ai' && <span className="channel-pill ai">ai</span>}
+              {c.label && c.label !== c.name && (
+                <span className={`channel-pill kind-${c.kind}`}>{c.label}</span>
+              )}
+              {c.private && <span className="channel-pill private" title="privado">🔒</span>}
             </button>
           ))}
         </div>

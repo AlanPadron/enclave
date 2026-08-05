@@ -27,7 +27,6 @@ async function request(path, { method = 'GET', body, token, auth = true } = {}) 
       body: body ? JSON.stringify(body) : undefined,
     })
   } catch (err) {
-    // Network error (offline, DNS, etc). Status 0 means "no response".
     throw new ApiError(err.message || 'network error', 0, null)
   }
   if (!res.ok) {
@@ -57,6 +56,10 @@ export const api = {
     request('/auth/login', { method: 'POST', body: { username, password } }),
   me: (token) => request('/me', { token }),
   channels: (token) => request('/channels', { token }),
+  createChannel: (token, payload) =>
+    request('/channels', { method: 'POST', body: payload, token }),
+  inviteToChannel: (token, channelId, userId) =>
+    request(`/channels/${channelId}/invite`, { method: 'POST', body: { userId }, token }),
   history: (token, channelId, limit = 50) =>
     request(`/channels/${channelId}/messages?limit=${limit}`, { token }),
   friends: (token) => request('/friends', { token }),
