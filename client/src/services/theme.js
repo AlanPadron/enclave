@@ -113,18 +113,30 @@ export function applyToDOM(settings) {
   if (settings.reduceMotion) root.setAttribute('data-motion', 'reduce')
   else root.removeAttribute('data-motion')
 
-  // Apply custom color overrides as inline CSS variables (highest specificity)
+  // Two style blocks: one for custom colors (preserved across reloads), one
+  // for font-scale rem overrides that scale every meaningful text element.
   let style = document.getElementById('enclave-custom-styles')
   if (!style) {
     style = document.createElement('style')
     style.id = 'enclave-custom-styles'
     document.head.appendChild(style)
   }
+
   const rules = []
+  // Custom color overrides
   for (const { key } of COLOR_KEYS) {
     const v = settings.customColors[key]
     if (v) rules.push(`--${key}: ${v};`)
   }
+  // Font scale — multiply every significant text size by the current scale.
+  // `rem` is relative to the root font-size, so we re-declare root size and
+  // then reference it via rem. We set the actual root size directly here so
+  // `1rem` reflects the chosen scale.
+  const scale = settings.fontSize === 'sm' ? 0.9
+              : settings.fontSize === 'lg' ? 1.15
+              : 1.0
+  const remBase = 16 * scale  // px
+  rules.push(`font-size: ${remBase}px;`)
   style.textContent = `:root { ${rules.join(' ')} }`
 }
 

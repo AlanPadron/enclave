@@ -62,15 +62,22 @@
   --shadow-1: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 24px 60px -30px rgba(0, 0, 0, 0.6);
   font-family: 'Inter Tight', system-ui, -apple-system, Segoe UI, sans-serif;
   font-feature-settings: 'cv11', 'ss01';
+  /* Base font size. data-font overrides scale it up/down. */
   font-size: 16px;
+  --font-scale: 1;
+  --font-size: calc(16px * var(--font-scale));
+  --line-height-base: 1.5;
+  --msg-line-height: 1.5;
+  --msg-gap: 3px;
 }
 
-/* Font size scale */
-[data-font='sm'] { font-size: 14.7px; }
-[data-font='md'] { font-size: 16px; }
-[data-font='lg'] { font-size: 17.3px; }
+/* Font size scale — sets --font-scale which is then multiplied into rem-based
+   sizes throughout the app via var(--font-size). */
+[data-font='sm'] { --font-scale: 0.9; }
+[data-font='md'] { --font-scale: 1.0; }
+[data-font='lg'] { --font-scale: 1.15; }
 
-/* Density — affects line-height and message gap */
+/* Density — affects message list line-height and gap */
 [data-density='compact'] { --msg-line-height: 1.4; --msg-gap: 1px; }
 [data-density='cozy']    { --msg-line-height: 1.5; --msg-gap: 3px; }
 [data-density='roomy']   { --msg-line-height: 1.65; --msg-gap: 6px; }
@@ -83,6 +90,136 @@
   animation-iteration-count: 1 !important;
   transition-duration: 0.01ms !important;
 }
+
+/* Font size scale — overrides every explicit px font-size we know about.
+   `em` is relative to the parent's font-size, so when the root font-size
+   scales (via enclave-custom-styles), these all scale proportionally. */
+[data-font='sm'] .btn,
+[data-font='sm'] .input,
+[data-font='sm'] .label,
+[data-font='sm'] .muted,
+[data-font='sm'] .dim,
+[data-font='sm'] .mono,
+[data-font='sm'] .empty-title,
+[data-font='sm'] .empty-sub,
+[data-font='sm'] .day-divider,
+[data-font='sm'] .msg-author,
+[data-font='sm'] .msg-text,
+[data-font='sm'] .msg-time,
+[data-font='sm'] .msg-time-rail,
+[data-font='sm'] .msg-pending,
+[data-font='sm'] .composer-input,
+[data-font='sm'] .composer-counter,
+[data-font='sm'] .channel-name,
+[data-font='sm'] .channel-pill,
+[data-font='sm'] .channel-header h1,
+[data-font='sm'] .channel-header .desc,
+[data-font='sm'] .channel-icon,
+[data-font='sm'] .section-title,
+[data-font='sm'] .settings-title,
+[data-font='sm'] .theme-name,
+[data-font='sm'] .theme-desc,
+[data-font='sm'] .color-label,
+[data-font='sm'] .color-desc,
+[data-font='sm'] .toggle-label,
+[data-font='sm'] .toggle-desc,
+[data-font='sm'] .settings-tab,
+[data-font='sm'] .settings-section-title,
+[data-font='sm'] .settings-section-sub,
+[data-font='sm'] .modal-title,
+[data-font='sm'] .modal-sub,
+[data-font='sm'] .friend-name,
+[data-font='sm'] .friend-label,
+[data-font='sm'] .friends-label,
+[data-font='sm'] .me-name,
+[data-font='sm'] .me-status,
+[data-font='sm'] .voice-title,
+[data-font='sm'] .voice-sub,
+[data-font='sm'] .voice-error,
+[data-font='sm'] .voice-pip-label,
+[data-font='sm'] .voice-pip-meta,
+[data-font='sm'] .ai-title,
+[data-font='sm'] .ai-sub,
+[data-font='sm'] .ai-pill,
+[data-font='sm'] .auth-title,
+[data-font='sm'] .auth-sub,
+[data-font='sm'] .auth-foot,
+[data-font='sm'] .auth-error,
+[data-font='sm'] .intro-tag,
+[data-font='sm'] .intro-logo { font-size: 0.9em !important; }
+
+[data-font='lg'] .btn,
+[data-font='lg'] .input,
+[data-font='lg'] .label,
+[data-font='lg'] .muted,
+[data-font='lg'] .dim,
+[data-font='lg'] .mono,
+[data-font='lg'] .empty-title,
+[data-font='lg'] .empty-sub,
+[data-font='lg'] .day-divider,
+[data-font='lg'] .msg-author,
+[data-font='lg'] .msg-text,
+[data-font='lg'] .msg-time,
+[data-font='lg'] .msg-time-rail,
+[data-font='lg'] .msg-pending,
+[data-font='lg'] .composer-input,
+[data-font='lg'] .composer-counter,
+[data-font='lg'] .channel-name,
+[data-font='lg'] .channel-pill,
+[data-font='lg'] .channel-header h1,
+[data-font='lg'] .channel-header .desc,
+[data-font='lg'] .channel-icon,
+[data-font='lg'] .section-title,
+[data-font='lg'] .settings-title,
+[data-font='lg'] .theme-name,
+[data-font='lg'] .theme-desc,
+[data-font='lg'] .color-label,
+[data-font='lg'] .color-desc,
+[data-font='lg'] .toggle-label,
+[data-font='lg'] .toggle-desc,
+[data-font='lg'] .settings-tab,
+[data-font='lg'] .settings-section-title,
+[data-font='lg'] .settings-section-sub,
+[data-font='lg'] .modal-title,
+[data-font='lg'] .modal-sub,
+[data-font='lg'] .friend-name,
+[data-font='lg'] .friend-label,
+[data-font='lg'] .friends-label,
+[data-font='lg'] .me-name,
+[data-font='lg'] .me-status,
+[data-font='lg'] .voice-title,
+[data-font='lg'] .voice-sub,
+[data-font='lg'] .voice-error,
+[data-font='lg'] .voice-pip-label,
+[data-font='lg'] .voice-pip-meta,
+[data-font='lg'] .ai-title,
+[data-font='lg'] .ai-sub,
+[data-font='lg'] .ai-pill,
+[data-font='lg'] .auth-title,
+[data-font='lg'] .auth-sub,
+[data-font='lg'] .auth-foot,
+[data-font='lg'] .auth-error,
+[data-font='lg'] .intro-tag,
+[data-font='lg'] .intro-logo { font-size: 1.1em !important; }
+
+/* Density — applies to messages, friend list rows, channel rows, etc. */
+[data-density='compact'] .msg,
+[data-density='compact'] .friend-row,
+[data-density='compact'] .channel-row { padding-top: 1px !important; padding-bottom: 1px !important; }
+[data-density='compact'] .msg-text { line-height: 1.4 !important; }
+[data-density='compact'] .messages-inner { gap: 1px !important; }
+
+[data-density='cozy'] .msg,
+[data-density='cozy'] .friend-row,
+[data-density='cozy'] .channel-row { padding-top: 3px !important; padding-bottom: 3px !important; }
+[data-density='cozy'] .msg-text { line-height: 1.5 !important; }
+[data-density='cozy'] .messages-inner { gap: 3px !important; }
+
+[data-density='roomy'] .msg,
+[data-density='roomy'] .friend-row,
+[data-density='roomy'] .channel-row { padding-top: 6px !important; padding-bottom: 6px !important; }
+[data-density='roomy'] .msg-text { line-height: 1.65 !important; }
+[data-density='roomy'] .messages-inner { gap: 6px !important; }
 
 * { box-sizing: border-box; }
 
