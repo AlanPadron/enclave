@@ -1,0 +1,56 @@
+.section-title {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 4px 4px 8px;
+}
+.channel-list { display: flex; flex-direction: column; gap: 2px; }
+.channel-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  color: var(--ink-2);
+  font-size: 14px;
+  text-align: left;
+  width: 100%;
+  transition: background 120ms ease, color 120ms ease;
+}
+.channel-row:hover { background: var(--glass); color: var(--ink); }
+.channel-row.active {
+  background: var(--glass-2);
+  color: var(--ink);
+  border: 1px solid var(--line-2);
+}
+.channel-icon {
+  width: 22px; height: 22px;
+  display: grid; place-items: center;
+  border-radius: 7px;
+  font-size: 12px;
+  background: var(--glass);
+  border: 1px solid var(--line);
+  color: var(--ink-2);
+  font-family: 'JetBrains Mono', monospace;
+}
+.channel-icon.kind-voice { color: var(--accent-2); }
+.channel-icon.kind-ai { color: var(--accent); }
+.channel-name { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.channel-pill {
+  font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 2px 6px; border-radius: 6px;
+  background: var(--glass); border: 1px solid var(--line); color: var(--ink-3);
+}
+.channel-pill.ai { color: var(--accent); border-color: rgba(139,158,255,0.3); }
+
+.channel-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--line);
+}
+.channel-header h1 {
+  margin: 0;
+  font-size: 17px; font-weight: 500; letter-spacing: -0.01em;
+}
+.channel-header .desc { font-size: 12px; color: var(--ink-3); }
+
+.channel-body { flex: 1; display: flex; flex-direction: column; min-height: 0; }

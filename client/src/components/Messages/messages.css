@@ -1,0 +1,38 @@
+.messages { flex: 1; overflow-y: auto; padding: 16px 8px 8px; }
+.messages-inner { max-width: 880px; margin: 0 auto; padding: 0 16px; display: flex; flex-direction: column; gap: 4px; }
+.messages.empty { display: grid; place-items: center; }
+.empty-card {
+  text-align: center; padding: 22px 28px;
+  border: 1px dashed var(--line-2);
+  border-radius: var(--radius);
+  background: var(--glass);
+  max-width: 360px;
+}
+.empty-title { font-weight: 500; font-size: 15px; }
+.empty-sub { font-size: 13px; margin-top: 4px; }
+
+.msg { display: flex; gap: 12px; padding: 4px 8px; border-radius: 10px; }
+.msg.grouped { padding-top: 1px; padding-bottom: 1px; }
+.msg:hover { background: rgba(255,255,255,0.02); }
+.msg-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: linear-gradient(135deg, rgba(139,158,255,0.35), rgba(108,255,208,0.25));
+  font-weight: 600; font-size: 12px; color: #0b0d14;
+  flex-shrink: 0;
+}
+.msg-spacer { width: 32px; flex-shrink: 0; }
+.msg-body { min-width: 0; flex: 1; }
+.msg-meta { display: flex; gap: 8px; align-items: baseline; margin-bottom: 2px; }
+.msg-author { font-weight: 600; font-size: 13.5px; }
+.msg-time { font-size: 11px; }
+.msg-text { font-size: 14.5px; line-height: 1.45; color: var(--ink); white-space: pre-wrap; word-wrap: break-word; }
+.msg.ai .msg-author { color: var(--accent); }
+.msg.ai .msg-text { color: var(--ink-2); font-style: italic; }
+
+.composer {
+  display: flex; gap: 8px; padding: 12px 20px 16px;
+  border-top: 1px solid var(--line);
+  background: linear-gradient(180deg, transparent, rgba(0,0,0,0.18));
+}
+.composer-input { flex: 1; }

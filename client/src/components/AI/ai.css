@@ -1,0 +1,24 @@
+.ai-banner {
+  margin: 12px 20px 0;
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, rgba(139,158,255,0.10), rgba(139,158,255,0.04));
+  border: 1px solid rgba(139,158,255,0.18);
+}
+.ai-icon {
+  width: 32px; height: 32px; border-radius: 10px;
+  display: grid; place-items: center;
+  background: rgba(139,158,255,0.18);
+  color: var(--accent);
+  font-size: 16px;
+}
+.ai-text { flex: 1; min-width: 0; }
+.ai-title { font-weight: 500; font-size: 13.5px; }
+.ai-sub { font-size: 12px; margin-top: 2px; }
+.ai-pill {
+  font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 6px;
+  background: var(--glass); border: 1px solid var(--line);
+  color: var(--ink-3);
+}
