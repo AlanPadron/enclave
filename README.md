@@ -27,21 +27,9 @@ Necesitas **Python 3.10+** (probado en 3.12) y **Node 18+** (probado en 24) para
 
 ```bash
 cd server
-uv venv
 source .venv/bin/activate
 uv pip install -e .
-cp .env.example .env       # opcional
 python -m app.main        # arranca en :4000
-```
-
-o sin uv:
-
-```bash
-cd server
-python -m venv .venv
-source .venv/bin/activate
-pip install -e .
-python -m app.main
 ```
 
 ### client (Node)
@@ -68,7 +56,7 @@ El backend expone los mismos endpoints y eventos socket.io que la versión anter
 - `voice-lounge` y `ai-sage` son espacios reservados. WebRTC P2P y la conexion al modelo de IA se conectan despues.
 - Si quieres ajustar la animacion de entrada, mira `client/src/components/Intro/Intro.jsx` y `client/src/styles/intro.css`.
 
-## proximos pasos sugeridos
+## proximos pasos
 
 1. Reemplazar persistencia en memoria por MongoDB (motor asíncrono: `motor`)
 2. WebRTC real para canales de voz
