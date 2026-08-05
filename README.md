@@ -25,7 +25,6 @@ Necesitas Node 18+ (probado en 24).
 
   cd server
   npm install
-  cp .env.example .env       # opcional
   npm run dev                # arranca en :4000
 
   cd client
