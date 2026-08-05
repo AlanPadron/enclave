@@ -44,9 +44,9 @@
 
 .channel-header {
   display: flex; align-items: center; gap: 10px;
-  padding: 18px 28px;
+  padding: 14px 28px;
   border-bottom: 1px solid var(--line);
-  min-height: 64px;
+  min-height: 56px;
 }
 .channel-header-main {
   display: flex; align-items: center; gap: 12px;

@@ -26,7 +26,7 @@ export default function MessageItem({ message, grouped, showDay, isFirstOfDay })
           <span>{dayLabel(message.createdAt)}</span>
         </div>
       )}
-      <div className={`msg ${grouped ? 'grouped' : ''} ${isAI ? 'ai' : ''}`}>
+      <div className={`msg ${grouped ? 'grouped' : ''} ${isAI ? 'ai' : ''} ${message.pending ? 'pending' : ''}`}>
         {grouped ? (
           <div className="msg-time-rail mono dim" title={new Date(message.createdAt).toLocaleString()}>
             {timeLabel(message.createdAt)}
@@ -40,6 +40,7 @@ export default function MessageItem({ message, grouped, showDay, isFirstOfDay })
           {!grouped && (
             <div className="msg-meta">
               <span className="msg-author">{message.authorName}</span>
+              {message.pending && <span className="msg-pending mono dim">enviando…</span>}
             </div>
           )}
           <div className="msg-text">{message.body}</div>

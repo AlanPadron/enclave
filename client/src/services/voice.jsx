@@ -48,6 +48,21 @@ export function VoiceProvider({ children }) {
     }
   }
 
+  // "Demo mode" — join the channel without any real mic/cam. Useful when
+  // the user is on a context that can't grant permissions (preview deploys,
+  // embedded webviews, when the user denied access, etc.). They still
+  // appear in the voice roster and can see/hear others.
+  const joinDemo = useCallback(() => {
+    setError(null)
+    const sock = getSocket()
+    if (!sock) return
+    sock.emit('voice:join', { channelId: voiceChannelRef.current })
+    setMicOn(false)
+    setCamOn(false)
+    setJoined(true)
+    setMinimized(false)
+  }, [])
+
   function stopMedia() {
     if (localStreamRef.current) {
       localStreamRef.current.getTracks().forEach(t => t.stop())
@@ -132,6 +147,7 @@ export function VoiceProvider({ children }) {
     localVideoRef,
     voiceChannel: voiceChannelRef.current,
     join,
+    joinDemo,
     leave,
     toggleMic,
     toggleCam,

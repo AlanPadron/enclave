@@ -8,8 +8,12 @@ const ICONS = {
   ai: '✦',
 }
 
-export default function ChannelList({ channels, active }) {
+export default function ChannelList({ channels, active, onPick }) {
   const navigate = useNavigate()
+  function go(id) {
+    navigate(`/app/${id}`)
+    onPick?.()
+  }
   return (
     <>
       <div className="section-title">channels</div>
@@ -18,7 +22,7 @@ export default function ChannelList({ channels, active }) {
           <button
             key={c.id}
             className={`channel-row ${active === c.id ? 'active' : ''}`}
-            onClick={() => navigate(`/app/${c.id}`)}
+            onClick={() => go(c.id)}
             title={c.description}
           >
             <span className={`channel-icon kind-${c.kind}`}>{ICONS[c.kind] || '#'}</span>

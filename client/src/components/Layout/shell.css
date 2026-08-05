@@ -3,6 +3,7 @@
   grid-template-columns: 260px 220px 1fr;
   gap: 12px;
   height: 100vh;
+  height: 100dvh;
   padding: 12px;
 }
 .shell-rail, .shell-channels, .shell-main {
@@ -35,9 +36,6 @@
 .shell-main.with-pip .shell-settings-btn {
   right: 292px;
 }
-@media (max-width: 640px) {
-  .shell-main.with-pip .shell-settings-btn { right: 12px; top: 70px; }
-}
 
 .brand {
   display: flex; align-items: center; gap: 8px;
@@ -67,11 +65,110 @@
 .me-name { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .me-status { font-size: 11px; color: var(--ink-3); }
 
+/* Mobile top bar — hidden on desktop */
+.mobile-topbar { display: none; }
+
+/* ===== Responsive ===== */
+
+/* Tablet: hide friend rail, keep channels */
 @media (max-width: 900px) {
   .shell { grid-template-columns: 220px 1fr; }
   .shell-rail { display: none; }
+  .shell-settings-btn { right: 14px; top: 14px; }
 }
+
+/* Mobile: single column, top bar, drawers */
 @media (max-width: 640px) {
-  .shell { grid-template-columns: 1fr; padding: 8px; gap: 8px; }
+  .shell {
+    grid-template-columns: 1fr;
+    padding: 8px;
+    gap: 8px;
+  }
   .shell-channels { display: none; }
+  .shell-rail { display: none; }
+  .shell-main { padding: 0; }
+
+  .mobile-topbar {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: calc(6px + env(safe-area-inset-top, 0)) 6px 6px;
+    border-bottom: 1px solid var(--line);
+    background: var(--glass-2);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    position: sticky;
+    top: 0;
+    z-index: 15;
+  }
+  .mobile-icon-btn {
+    width: 38px; height: 38px;
+    padding: 0;
+    border-radius: 10px;
+    display: grid; place-items: center;
+  }
+  .mobile-topbar-title {
+    flex: 1;
+    display: flex; align-items: center; gap: 8px;
+    padding: 0 8px;
+    min-width: 0;
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: -0.01em;
+  }
+  .mobile-topbar-channel {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .mobile-topbar .brand-dot {
+    width: 7px; height: 7px;
+  }
+
+  /* The floating desktop ⚙ button becomes redundant on mobile (top bar has it) */
+  .shell-settings-btn { display: none; }
+
+  .shell-main.with-pip .shell-settings-btn { display: none; }
+}
+
+/* Drawer (used on mobile for friends & channels) */
+.mobile-drawer {
+  position: fixed; inset: 0;
+  z-index: 250;
+  display: none;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: md-fade 180ms ease;
+}
+.mobile-drawer.open { display: block; }
+@keyframes md-fade { from { opacity: 0; } to { opacity: 1; } }
+
+.mobile-drawer-panel {
+  position: absolute;
+  top: 0; bottom: 0; left: 0;
+  width: min(82vw, 320px);
+  padding: calc(14px + env(safe-area-inset-top, 0)) 14px 14px;
+  display: flex; flex-direction: column;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  animation: md-slide 220ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+@keyframes md-slide {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
+.mobile-drawer-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 4px 8px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  text-transform: lowercase;
+}
+
+/* iOS standalone — make sure the topbar reaches under the status bar */
+@supports (padding: env(safe-area-inset-top)) {
+  @media (max-width: 640px) {
+    .shell { padding-top: 8px; }
+    .mobile-topbar { padding-top: calc(6px + env(safe-area-inset-top)); }
+  }
 }

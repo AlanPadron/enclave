@@ -135,6 +135,14 @@
   color: #0b0d14;
 }
 
+.msg.pending { opacity: 0.55; }
+.msg-pending {
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-left: 4px;
+}
+
 /* Composer */
 .composer {
   padding: 12px 24px 18px;
@@ -205,3 +213,27 @@
 .composer-send:not(:disabled):hover { transform: scale(1.05); }
 .composer-send:active { transform: scale(0.96); }
 .composer-send:disabled { cursor: not-allowed; }
+
+/* ===== Mobile ===== */
+@media (max-width: 640px) {
+  .messages { padding: 16px 0 8px; }
+  .messages-inner { padding: 0 14px 0 18px; max-width: 100%; }
+  .msg { padding: 3px 6px; margin: 0 -6px; gap: 10px; }
+  .msg-avatar { width: 28px; height: 28px; font-size: 11px; }
+  .msg-text { font-size: 15px; }
+  .msg-author { font-size: 13px; }
+  .day-divider { font-size: 10px; margin: 12px 0 4px; }
+  .composer { padding: 8px 12px calc(10px + env(safe-area-inset-bottom, 0)); }
+  .composer-wrap { padding: 6px 6px 6px 12px; border-radius: 12px; }
+  .composer-input { font-size: 16px; /* iOS: avoid zoom on focus */ }
+  .empty-card { padding: 22px 18px; }
+  .empty-mark { font-size: 24px; }
+  .empty-title { font-size: 14px; }
+}
+
+/* Auth on mobile */
+@media (max-width: 640px) {
+  .auth-wrap { padding: 16px; align-items: flex-start; padding-top: 12vh; }
+  .auth-card { padding: 22px; }
+  .auth-title { font-size: 20px; }
+}

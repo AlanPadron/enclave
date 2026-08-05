@@ -48,6 +48,13 @@ export default function VoicePlaceholder({ channelId }) {
           >
             entrar al canal
           </button>
+          <button
+            className="btn btn-ghost"
+            onClick={voice.joinDemo}
+            style={{ marginTop: 6 }}
+          >
+            entrar sin permisos (demo)
+          </button>
           {voice.error && <div className="voice-error">{voice.error}</div>}
           {voice.peers.length > 0 && (
             <div className="voice-peers">

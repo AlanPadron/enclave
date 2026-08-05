@@ -60,6 +60,7 @@ def register_socket_handlers(sio: socketio.AsyncServer) -> None:
     async def on_message_send(sid, data):
         channel_id = (data or {}).get("channelId")
         body = (data or {}).get("body") or ""
+        client_id = (data or {}).get("_clientId")
         if not channel_id or not body.strip():
             return
         channel = messages.get_channel(channel_id)
@@ -69,11 +70,15 @@ def register_socket_handlers(sio: socketio.AsyncServer) -> None:
         if not session:
             return
 
+        # Echo client id back so the sender can reconcile its optimistic copy
+        def with_client_id(msg: dict) -> dict:
+            return {**msg, "_clientId": client_id} if client_id else msg
+
         if channel["kind"] == "ai":
             user_msg = messages.add_message(
                 channel_id, session["user_id"], session["username"], body.strip()
             )
-            await sio.emit("message:new", user_msg, room=f"chan:{channel_id}")
+            await sio.emit("message:new", with_client_id(user_msg), room=f"chan:{channel_id}")
             reply = messages.add_message(
                 channel_id, "ai", "sage", "[AI no conectado — espacio reservado para el agente]"
             )
@@ -86,7 +91,7 @@ def register_socket_handlers(sio: socketio.AsyncServer) -> None:
         msg = messages.add_message(
             channel_id, session["user_id"], session["username"], body.strip()
         )
-        await sio.emit("message:new", msg, room=f"chan:{channel_id}")
+        await sio.emit("message:new", with_client_id(msg), room=f"chan:{channel_id}")
 
     @sio.on("voice:join")
     async def on_voice_join(sid, data):

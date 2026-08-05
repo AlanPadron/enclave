@@ -1,22 +1,38 @@
 const TOKEN_KEY = 'enclave.token'
 const USER_KEY = 'enclave.user'
 
+// Thrown on non-2xx responses. `status` is the HTTP status code (0 if network error).
+export class ApiError extends Error {
+  constructor(message, status, body) {
+    super(message)
+    this.name = 'ApiError'
+    this.status = status
+    this.body = body
+  }
+}
+
 function authHeader(token) {
   return token ? { Authorization: `Bearer ${token}` } : {}
 }
 
-async function request(path, { method = 'GET', body, token } = {}) {
-  const res = await fetch(`/api${path}`, {
-    method,
-    headers: {
-      'Content-Type': 'application/json',
-      ...authHeader(token),
-    },
-    body: body ? JSON.stringify(body) : undefined,
-  })
+async function request(path, { method = 'GET', body, token, auth = true } = {}) {
+  let res
+  try {
+    res = await fetch(`/api${path}`, {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+        ...(auth ? authHeader(token) : {}),
+      },
+      body: body ? JSON.stringify(body) : undefined,
+    })
+  } catch (err) {
+    // Network error (offline, DNS, etc). Status 0 means "no response".
+    throw new ApiError(err.message || 'network error', 0, null)
+  }
   if (!res.ok) {
-    const err = await res.json().catch(() => ({ error: 'request failed' }))
-    throw new Error(err.error || 'request failed')
+    const errBody = await res.json().catch(() => ({ error: 'request failed' }))
+    throw new ApiError(errBody.error || 'request failed', res.status, errBody)
   }
   return res.json()
 }
