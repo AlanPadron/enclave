@@ -44,12 +44,29 @@
 
 .channel-header {
   display: flex; align-items: center; gap: 10px;
-  padding: 16px 20px;
+  padding: 18px 28px;
   border-bottom: 1px solid var(--line);
+  min-height: 64px;
 }
+.channel-header-main {
+  display: flex; align-items: center; gap: 12px;
+}
+.channel-header .channel-icon {
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  display: grid; place-items: center;
+  font-size: 14px;
+  background: var(--glass);
+  border: 1px solid var(--line);
+  color: var(--ink-2);
+  font-family: 'JetBrains Mono', monospace;
+}
+.channel-header .channel-icon.kind-voice { color: var(--accent-2); }
+.channel-header .channel-icon.kind-ai { color: var(--accent); }
 .channel-header h1 {
   margin: 0;
-  font-size: 17px; font-weight: 500; letter-spacing: -0.01em;
+  font-size: 15.5px; font-weight: 600; letter-spacing: -0.01em;
+  line-height: 1.1;
 }
 .channel-header .desc { font-size: 12px; color: var(--ink-3); }
 

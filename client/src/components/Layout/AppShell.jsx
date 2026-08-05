@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams, Routes, Route, Navigate } from 'react-router-dom'
 import { api } from '../../services/api.js'
 import { connectSocket, getSocket, disconnectSocket } from '../../services/websocket.js'
+import { useVoice } from '../../services/voice.jsx'
 import ChannelList from '../Channels/ChannelList.jsx'
 import ChannelView from '../Channels/ChannelView.jsx'
 import FriendList from '../Friends/FriendList.jsx'
 import Settings from '../Settings/Settings.jsx'
 import Modal from '../Modal/Modal.jsx'
+import VoicePiP from '../Voice/VoicePiP.jsx'
 import './shell.css'
 
 export default function AppShell() {
@@ -15,6 +17,7 @@ export default function AppShell() {
   const [channels, setChannels] = useState([])
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [logoutOpen, setLogoutOpen] = useState(false)
+  const voice = useVoice()
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -72,7 +75,7 @@ export default function AppShell() {
         <ChannelList channels={channels} active={channelId} />
       </aside>
 
-      <main className="shell-main glass">
+      <main className={`shell-main glass ${voice.joined && voice.minimized ? 'with-pip' : ''}`}>
         <button
           className="btn btn-ghost shell-settings-btn"
           onClick={() => setSettingsOpen(true)}
@@ -88,6 +91,7 @@ export default function AppShell() {
       </main>
 
       <Settings open={settingsOpen} onClose={() => setSettingsOpen(false)} />
+      <VoicePiP />
       <Modal
         open={logoutOpen}
         title="¿cerrar sesión?"

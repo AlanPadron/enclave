@@ -1,0 +1,91 @@
+.voice-pip {
+  position: fixed;
+  top: 64px;
+  right: 16px;
+  z-index: 90;
+  width: 260px;
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.5);
+  animation: pip-in 220ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+@keyframes pip-in {
+  from { opacity: 0; transform: translateY(-6px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.voice-pip-restore {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  cursor: pointer;
+  color: var(--ink);
+  width: 100%;
+  font-size: 12.5px;
+  transition: background 100ms ease;
+}
+.voice-pip-restore:hover { background: var(--glass); }
+
+.voice-pip-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--danger);
+  box-shadow: 0 0 8px var(--danger);
+  animation: pulse 1.6s ease-in-out infinite;
+  flex-shrink: 0;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.voice-pip-label { font-weight: 500; flex: 1; }
+.voice-pip-meta { color: var(--ink-3); font-size: 11px; }
+.voice-pip-arrow { color: var(--ink-3); font-size: 12px; }
+
+.voice-pip-preview {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.voice-pip-video { width: 100%; height: 100%; object-fit: cover; }
+.voice-pip-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--glass-2);
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  color: var(--ink-2);
+}
+.voice-pip-icons {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  display: flex;
+  gap: 4px;
+  padding: 4px 6px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+  font-size: 10px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.voice-pip-icons span { opacity: 0.8; }
+.voice-pip-icons span.off { opacity: 0.35; text-decoration: line-through; }
+
+@media (max-width: 640px) {
+  .voice-pip { width: calc(100vw - 24px); right: 12px; }
+}
