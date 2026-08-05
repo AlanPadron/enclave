@@ -1,6 +1,6 @@
 # enclave
 
-App de mensajería minimalista. Estado: **alpha 0.2** — primera base pulida lista para iterar.
+App de mensajería minimalista. Estado: **alpha 0.3** — backend migrado a Python (FastAPI + python-socketio).
 
 ## qué hay
 
@@ -17,35 +17,60 @@ App de mensajería minimalista. Estado: **alpha 0.2** — primera base pulida li
 ## estructura
 
   client/  React 18 + Vite
-  server/  Express + Socket.io
+  server/  FastAPI + python-socketio (Python 3.10+)
 
 ## cómo correr
 
-Necesitas Node 18+ (probado en 24).
+Necesitas **Python 3.10+** (probado en 3.12) y **Node 18+** (probado en 24) para el frontend.
 
-  cd server
-  npm install
-  npm run dev                # arranca en :4000
+### server (Python)
 
-  cd client
-  npm install
-  npm run dev                # abre http://localhost:5173
+```bash
+cd server
+uv venv
+source .venv/bin/activate
+uv pip install -e .
+cp .env.example .env       # opcional
+python -m app.main        # arranca en :4000
+```
+
+o sin uv:
+
+```bash
+cd server
+python -m venv .venv
+source .venv/bin/activate
+pip install -e .
+python -m app.main
+```
+
+### client (Node)
+
+```bash
+cd client
+npm install
+npm run dev                # abre http://localhost:5173
+```
 
 Abre dos pestañas en http://localhost:5173, registra dos usuarios distintos, y prueba:
 - enviar mensajes en `#general` → aparecen en tiempo real
 - mandar solicitud de amistad entre las dos cuentas
-- entrar a `#voice-lounge` (UI placeholder)
+- entrar a `#voice-lounge` → el navegador pide permiso de mic, opcional cam
 - escribir en `#ai-sage` → recibes un eco marcado como offline
+
+## wire shape
+
+El backend expone los mismos endpoints y eventos socket.io que la versión anterior (Express), así que el frontend React no necesitó cambios. La forma de error se mantiene como `{"error": "..."}` (no `{"detail": "..."}`).
 
 ## notas para iterar
 
-- Los modelos Mongoose y la conexion a Redis ya tienen el slot listo en `server/src/config/`. Solo llena las variables en `.env` y descomenta las lineas.
-- `voice-lounge` y `ai-sage` son espacios reservados. WebRTC y la conexion al modelo de IA se conectan despues.
+- La persistencia en memoria es el mismo approach. Cuando agregues Mongo, edita `server/app/models/user.py` y `message.py`.
+- `voice-lounge` y `ai-sage` son espacios reservados. WebRTC P2P y la conexion al modelo de IA se conectan despues.
 - Si quieres ajustar la animacion de entrada, mira `client/src/components/Intro/Intro.jsx` y `client/src/styles/intro.css`.
 
 ## proximos pasos sugeridos
 
-1. Reemplazar persistencia en memoria por MongoDB
+1. Reemplazar persistencia en memoria por MongoDB (motor asíncrono: `motor`)
 2. WebRTC real para canales de voz
 3. Conectar el agente IA a un modelo
 4. Soporte para mensajes directos (DMs)
