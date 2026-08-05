@@ -31,7 +31,13 @@ async function request(path, { method = 'GET', body, token, auth = true } = {}) 
   }
   if (!res.ok) {
     const errBody = await res.json().catch(() => ({ error: 'request failed' }))
-    throw new ApiError(errBody.error || 'request failed', res.status, errBody)
+    const err = new ApiError(errBody.error || 'request failed', res.status, errBody)
+    // 401 means the session is dead. Tell the app so it can boot the user
+    // back to the login screen without leaving them stuck on a half-broken UI.
+    if (res.status === 401) {
+      try { window.dispatchEvent(new CustomEvent('enclave:session-expired', { detail: { reason: errBody.error } })) } catch {}
+    }
+    throw err
   }
   return res.json()
 }

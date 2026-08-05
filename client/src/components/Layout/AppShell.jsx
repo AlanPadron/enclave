@@ -20,6 +20,7 @@ export default function AppShell() {
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [logoutOpen, setLogoutOpen] = useState(false)
   const [sessionExpired, setSessionExpired] = useState(false)
+  const [expiredReason, setExpiredReason] = useState('')
   const [friendsOpen, setFriendsOpen] = useState(false)
   const [channelsOpen, setChannelsOpen] = useState(false)
   const [createChannelOpen, setCreateChannelOpen] = useState(false)
@@ -54,6 +55,18 @@ export default function AppShell() {
     return () => window.removeEventListener('enclave:refresh-channels', onRefresh)
   }, [])
 
+  // Global 401 from any api call: show the session-expired modal with the
+  // server-supplied reason so the user knows whether it's expired, a server
+  // restart, or a malformed token.
+  useEffect(() => {
+    function onExpired(e) {
+      setExpiredReason(e?.detail?.reason || 'tu sesión ya no es válida')
+      setSessionExpired(true)
+    }
+    window.addEventListener('enclave:session-expired', onExpired)
+    return () => window.removeEventListener('enclave:session-expired', onExpired)
+  }, [])
+
   useEffect(() => {
     const sock = getSocket()
     if (!sock) return
@@ -75,6 +88,7 @@ export default function AppShell() {
   function ackSessionExpired() {
     api.clear()
     setSessionExpired(false)
+    setExpiredReason('')
     navigate('/login')
   }
 
@@ -173,7 +187,7 @@ export default function AppShell() {
       <Modal
         open={sessionExpired}
         title="sesión expirada"
-        sub="vuelve a iniciar sesión para continuar."
+        sub={expiredReason || 'vuelve a iniciar sesión para continuar.'}
         onClose={ackSessionExpired}
       >
         <div className="modal-actions">
