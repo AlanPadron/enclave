@@ -6,7 +6,7 @@
 //   - Cache-first for static assets (JS, CSS, fonts, images) keyed by URL.
 //   - Never cache /api or /socket.io — those are real-time / stateful.
 
-const CACHE_VERSION = 'enclave-v1'
+const CACHE_VERSION = 'enclave-v2'
 const SHELL = [
   '/',
   '/index.html',

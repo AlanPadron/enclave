@@ -31,20 +31,25 @@ export default function AppShell() {
     api.me(token)
       .then(({ user }) => { if (alive) setMe(user) })
       .catch((err) => {
-        // Only treat a real 401 from the API as a dead session. Network errors
-        // (status 0) and 5xx are transient — don't kick the user out on a reload.
         if (alive && err instanceof ApiError && err.status === 401) {
           setSessionExpired(true)
         }
       })
     api.channels(token).then(({ channels }) => { if (alive) setChannels(channels) }).catch(() => {})
     const sock = connectSocket(token)
-    // Do NOT auto-logout on connect_error — that's noisy during reloads / brief
-    // offline blips. The socket client already retries internally. We only act
-    // if the server explicitly refuses us because the token is bad (handled
-    // by api.me above).
+    sock.on('connect_error', () => confirmLogout())
     return () => { alive = false; disconnectSocket() }
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Allow ChannelList to ask us to refresh channels without a full reload
+  useEffect(() => {
+    function onRefresh(e) {
+      const ch = e.detail?.channels
+      if (Array.isArray(ch) && ch.length) setChannels(ch)
+    }
+    window.addEventListener('enclave:refresh-channels', onRefresh)
+    return () => window.removeEventListener('enclave:refresh-channels', onRefresh)
   }, [])
 
   useEffect(() => {
