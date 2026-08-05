@@ -128,3 +128,9 @@
   border-color: var(--danger);
 }
 .vc-btn.end:hover { background: #ff5d70; }
+.vc-btn.pip {
+  background: var(--glass);
+  color: var(--ink-2);
+  border-color: var(--line-2);
+}
+.vc-btn.pip:hover { color: var(--ink); background: var(--glass-2); }

@@ -38,8 +38,15 @@ export default function ChannelView({ channelId, channels, me }) {
   return (
     <>
       <header className="channel-header">
-        <h1># {channel?.name || channelId}</h1>
-        <span className="desc">{channel?.description}</span>
+        <div className="channel-header-main">
+          <div className={`channel-icon kind-${channel?.kind}`}>
+            {channel?.kind === 'text' ? '#' : channel?.kind === 'voice' ? '~' : '✦'}
+          </div>
+          <div>
+            <h1>{channel?.name || channelId}</h1>
+            <span className="desc">{channel?.description}</span>
+          </div>
+        </div>
       </header>
       <div className="channel-body">
         {channel?.kind === 'ai' && <AIBanner />}
